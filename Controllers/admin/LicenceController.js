@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Licence from '../../Models/admin/Licence';
+import Licence from '../../Models/admin/Licence.js';
 import { validationResult } from 'express-validator';
 
 export const index = async (req, res) => {
@@ -7,7 +7,8 @@ export const index = async (req, res) => {
         const licence = await Licence.find().lean();
         return res.status(200).json({ status: true, data: licence });
     } catch (err) {
-        return res.status(200).json({ status: false, message: err.message })
+        next(err);
+        // return res.status(200).json({ status: false, message: err.message })
     }
 };
 
@@ -51,7 +52,7 @@ export const store = async (req, res) => {
 
         const clientConnection = mongoose.createConnection(`mongodb://127.0.0.1:27017/${clientDBName}`);
 
-        return res.status(200).json({ status: true, message: 'Licence create successfully', data: { licence, clientDbName }});
+        return res.status(200).json({ status: true, message: 'Licence create successfully', data: { licence, clientDBName }});
         
     } catch (err) {
         return res.status(200).json({ status: false, message: err.message })

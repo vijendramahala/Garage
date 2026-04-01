@@ -2,9 +2,9 @@ import express from "express";
 const router = express.Router();
 
 
-import * as LicenceController from '../../Controllers/admin/LicenceController';
+import * as LicenceController from "../../Controllers/admin/LicenceController.js";
 
-router.get('/licence', LicenceController.store);
+router.get('/licence', LicenceController.index);
 router.post('/licence', LicenceController.store);
 router.put('/licence/:id', LicenceController.update);
 router.delete('/licence/:id', LicenceController.destroy);
