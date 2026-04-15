@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import cors from "cors"
 import morgan from "morgan";
 import fs from "fs";
+import path from "path";
 import connectDB from "./config/masterdb.js";
 
 dotenv.config();
@@ -13,15 +14,19 @@ const logStream = fs.createWriteStream(
 );
 
 import adminrouter from './Routes/admin/Api.js';
+import branchrouter from './Routes/Api.js';
 
 const app = express();
 connectDB();
 
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 app.use(morgan("combined", { stream: logStream }));
 
 app.use('/api', adminrouter);
+app.use('/api', branchrouter);
 
 
 app.use((err, req, res, next) => {
@@ -36,9 +41,9 @@ app.use((err, req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-    res.send("SERVER IS RUNING APP GARAGE ")
+  res.send("SERVER IS RUNING APP GARAGE ")
 });
 
 app.listen(process.env.PORT, '0.0.0.0', () => {
-    console.log(`SERVER RUNING ON http://0.0.0.0:${process.env.PORT}`);
+  console.log(`SERVER RUNING ON http://0.0.0.0:${process.env.PORT}`);
 })

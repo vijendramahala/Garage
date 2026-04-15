@@ -50,7 +50,7 @@ export const store = async (req, res) => {
         licence.db_name = clientDBName;
         await licence.save();
 
-        const clientConnection = mongoose.createConnection(`mongodb://127.0.0.1:27017/${clientDBName}`);
+        const clientConnection = mongoose.createConnection(`process.env.CLIENT_URL${clientDBName}`);
 
         return res.status(200).json({ status: true, message: 'Licence create successfully', data: { licence, clientDBName }});
         
@@ -73,7 +73,7 @@ export const update = async (req, res) => {
         }
 
         const update = {
-            licence_no: req.body.licence_no,
+            licence_no: licence.licence_no,
             licence_date: req.body.licence_date,
             amc_due_date: req.body.amc_due_date,
             company_name: req.body.company_name,
@@ -97,7 +97,7 @@ export const update = async (req, res) => {
             other4: req.body.other4,
             other5: req.body.other5
         }
-        const updatelicence = await Licence.findByIdAndUpdate(id, update, { new: true });
+        const updatelicence = await Licence.findByIdAndUpdate(id, update, { returnDocument: 'after' });
 
         return res.status(200).json({ status: true, message: "Licence update successfully", data: updatelicence })
         
@@ -116,7 +116,7 @@ export const destroy = async (req, res) => {
         }
 
         if(licence.db_name){
-            const tempconn = mongoose.createConnection(`mongodb://127.0.0.1:27018/${licence.db_name}`);
+            const tempconn = mongoose.createConnection(`process.env.CLIENT_URL${licence.db_name}`);
             tempconn.once('open', async () => {
                 try{
                     await tempconn.dropDatabase();
@@ -148,7 +148,7 @@ export const autono = async (req, res) => {
     return res.status(200).json({ status: true, next_licence_no: nextNo })
 
     } catch (err) {
-    console.error('Error fetching next licence no:', error);
+    console.error('Error fetching next licence no:', err);
         return res.status(200).json({ status: false, message: err.message })
     }
 };

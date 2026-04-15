@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const connections = {};
 
-const connectMasterDb = () => {
+export const connectMasterDb = () => {
     return mongoose.createConnection(process.env.MONGO_URL, {
     maxPoolSize: 20,
     serverSelectionTimeoutMS: 30000,
@@ -10,7 +10,7 @@ const connectMasterDb = () => {
     });
 };
 
-const connectClientDb = (dbName) => {
+ export const connectClientDb = (dbName) => {
 
     if(connections[dbName]){
         return connections[dbName];
@@ -36,4 +36,4 @@ const connectClientDb = (dbName) => {
     return connection;
 };
 
-export default { connectMasterDb, connectClientDb }
+// export default { connectMasterDb, connectClientDb }
